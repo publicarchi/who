@@ -1,10 +1,9 @@
-BUILD := doc
-OUTPUT := $(BUILD)/css
-TMP := $(BUILD)/tmp
+# BUILD := doc
+OUTPUT := doc
 
-css := $(patsubst css/%.scss,$(OUTPUT)/%.css,$(wildcard css/*.scss))
+css := $(patsubst css/%.scss,$(OUTPUT)/css/%.css,$(wildcard css/*.scss))
 
-md := $(patsubst %.md,$(TMP)/%.xml,$(wildcard *.md))
+md := $(patsubst %.md,$(OUTPUT)/%.xml,$(wildcard *.md))
 
 mdFiles := $(shell find . -type f -name "*.md")
 
@@ -14,14 +13,14 @@ all: clean css md2tei tei2html
 
 clean:
 	@echo 'cleaning…'
-	@rm -rf $(BUILD) $(TMP) .sass*
+	@rm -rf $(OUTPUT) .sass*
 
-css: $(css)
+css: $(OUTPUT) $(css)
 
 md2tei: $(md)
 
-tei2html:
-	@for f in $(shell find $(TMP) -type f -name "*.xml") ; \
+tei2html: $(md)
+	@for f in $(shell find $(OUTPUT) -type f -name "*.xml") ; \
 	do echo 'transforming…' $$f ; \
 	teitohtml $$f $$f.html ; \
 	done ;
@@ -29,11 +28,10 @@ tei2html:
 $(OUTPUT):
 	mkdir -p $(OUTPUT)
 
-$(OUTPUT)/%.css: css/%.scss $(OUTPUT)
+$(OUTPUT)/css/%.css: css/%.scss
+	@mkdir -p $(@D)
 	sass $< $@
 
-$(TMP):
-	mkdir $(TMP)
-
-$(TMP)/%.xml: %.md $(mdFiles) $(OUTPUT) $(TMP)
+$(OUTPUT)/%.xml: %.md
+	@mkdir -p $(@D)
 	markdowntotei $< $@
