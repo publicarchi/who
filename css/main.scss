@@ -1,0 +1,49 @@
+/**
+ * this is a css for publicarchitectura.org
+ * @author emchateau
+ * @since 2017-07-25
+ * @version 0.1
+*/
+
+/* reset border-box @see */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* max width */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+article, aside {
+  flex-basis: 100%;
+}
+
+@media screen and (min-width: 800px) {
+  aside {
+    flex: 2.5;
+  }
+  article {
+    flex: 7.5;
+  }
+}
+
+/* titles */
+h1 {
+  font-size: 1.5rem;
+}
+
+@media screen and (min-width: 800px) {
+  h1 {
+    font-size: 2rem;
+  }
+}
